@@ -27,7 +27,7 @@ The application deliberately does not import, extract, display, log, transmit, o
 
 ```powershell
 dotnet restore RobloxAccountManager.sln
-dotnet build RobloxAccountManager.sln --configuration Release --platform x64
+dotnet build RobloxAccountManager.sln --configuration Release -p:Platform=x64
 dotnet test tests/RobloxAccountManager.Tests/RobloxAccountManager.Tests.csproj --configuration Release
 dotnet publish src/RobloxAccountManager/RobloxAccountManager.csproj --configuration Release --runtime win-x64
 ```
