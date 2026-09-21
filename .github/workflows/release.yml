@@ -54,10 +54,11 @@ jobs:
           dotnet publish src/RobloxAccountManager/RobloxAccountManager.csproj
           --configuration Release
           --runtime win-x64
-          --self-contained false
+          --self-contained true
           --no-restore
           --output artifacts/publish
           -p:Platform=x64
+          -p:WindowsAppSDKSelfContained=true
       - name: Package
         shell: pwsh
         run: Compress-Archive -Path artifacts/publish/* -DestinationPath RobloxAccountManager-Windows-x64.zip
