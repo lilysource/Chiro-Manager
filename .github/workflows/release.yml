@@ -15,19 +15,49 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
-      - name: Show .NET SDK
-        run: dotnet --info
-      - name: Clean
-        run: dotnet clean RobloxAccountManager.sln --configuration Release -p:Platform=x64
+          dotnet-version: 8.0.414
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+      - name: Show tool versions
+        shell: pwsh
+        run: |
+          dotnet --info
+          msbuild -version
       - name: Restore
-        run: dotnet restore RobloxAccountManager.sln -p:Platform=x64
+        shell: pwsh
+        run: >
+          msbuild RobloxAccountManager.sln
+          /t:Restore
+          /p:Configuration=Release
+          /p:Platform=x64
+          /p:RestoreForce=true
       - name: Build
-        run: dotnet build RobloxAccountManager.sln --configuration Release --no-restore -p:Platform=x64
+        shell: pwsh
+        run: >
+          msbuild RobloxAccountManager.sln
+          /t:Build
+          /p:Configuration=Release
+          /p:Platform=x64
+          /p:Restore=false
       - name: Test
-        run: dotnet test tests/RobloxAccountManager.Tests/RobloxAccountManager.Tests.csproj --configuration Release --no-build -p:Platform=x64
+        shell: pwsh
+        run: >
+          dotnet test tests/RobloxAccountManager.Tests/RobloxAccountManager.Tests.csproj
+          --configuration Release
+          --no-build
+          -p:Platform=x64
       - name: Publish
-        run: dotnet publish src/RobloxAccountManager/RobloxAccountManager.csproj --configuration Release --runtime win-x64 --self-contained false --no-restore --output artifacts/publish -p:Platform=x64
+        shell: pwsh
+        run: >
+          dotnet publish src/RobloxAccountManager/RobloxAccountManager.csproj
+          --configuration Release
+          --runtime win-x64
+          --self-contained false
+          --no-restore
+          --output artifacts/publish
+          -p:Platform=x64
       - name: Package
         shell: pwsh
         run: Compress-Archive -Path artifacts/publish/* -DestinationPath RobloxAccountManager-Windows-x64.zip
