@@ -1,4 +1,5 @@
 using RobloxAccountManager.Models;
+using Xunit;
 
 namespace RobloxAccountManager.Tests;
 
